@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Socket.IO incidents test</title>
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px Helvetica, Arial; }
@@ -18,15 +18,19 @@
     <script>
       var socket = io.connect();
        
-      socket.on("update", function(data) {
-        console.log(data);
+      socket.on("lbpdinit", function(data) {
+        console.log('init', data);
+      });
+       
+      socket.on("lbpdupdate", function(data) {
+        console.log('update', data);
       });
 
     </script>
   </head>
   <body>
     <ul id="incidentlist">
-    
+
     </ul>
   </body>
 </html>

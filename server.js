@@ -41,22 +41,25 @@ app.get("/incidents", function(req, res) {
 var io = sockio.listen(app.listen(8091), {log: false});
 console.log("Socket.io listening on port 8091");
 
-var getIncidents = r.db("lbpd").table("incidents").orderBy({index: 'id'}).limit(5);
+var getIncidents = r.db("lbpd").table("incidents").orderBy({index: 'id'});
 
 r.connect().then(function(conn) {
 	return getIncidents.changes().run(conn);
 })
 .then(function(cursor) {
 	cursor.each(function(err, data) {
-		io.sockets.emit("update", data);
+		io.sockets.emit("lbpdupdate", data);
 	});
 });
 
 io.on("connection", function(socket) {
-  r.connect().then(function(conn) {
-    return getIncidents.run(conn)
-      .finally(function() { conn.close(); });
-  })
-  .then(function(output) { socket.emit("incidents", output); });
+	r.connect().then(function(conn) {
+		return getIncidents.run(conn);
+	})
+	.then(function(cursor) {
+		cursor.toArray(function(err, result) {
+			io.sockets.emit("lbpdinit", result);
+		});
+	});
 });
 
