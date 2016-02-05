@@ -1,16 +1,15 @@
 var sockio = require("socket.io");
-var app = require("express")();
+var express = require('express');
+var app = express();
 var r = require("rethinkdb");
 
 app.listen(8090);
 console.log("Node.js listening on port 8090");
 
-// Serves up default HTML file
-app.get('/', function(req, res){
-  res.sendfile('index.html');
-});
+// Use static serving from public directory
+app.use(express.static('public'));
 
-// Returns single incidents by ID
+// Returns single incidents by ID as JSON
 app.get("/incidents/:itemid", function(req, res) {
 	var itemid = parseInt(req.params.itemid, 10);
 
@@ -25,7 +24,7 @@ app.get("/incidents/:itemid", function(req, res) {
 });
 
 
-// Returns all incidents
+// Returns all incidents as JSON
 app.get("/incidents", function(req, res) {
 	r.connect().then(function(conn) {
 		return r.db("lbpd").table("incidents").run(conn)
@@ -38,11 +37,14 @@ app.get("/incidents", function(req, res) {
 });
 
 
+// Initialize SocketIO server
 var io = sockio.listen(app.listen(8091), {log: false});
 console.log("Socket.io listening on port 8091");
 
+// Save query reference to all incidents ordered by ID
 var getIncidents = r.db("lbpd").table("incidents").orderBy({index: 'id'});
 
+// Send each new incident to current lpbdupdate clients
 r.connect().then(function(conn) {
 	return getIncidents.changes().run(conn);
 })
@@ -52,6 +54,7 @@ r.connect().then(function(conn) {
 	});
 });
 
+// Send all current incidents once to new lpbdinit clients
 io.on("connection", function(socket) {
 	r.connect().then(function(conn) {
 		return getIncidents.run(conn);
@@ -62,4 +65,3 @@ io.on("connection", function(socket) {
 		});
 	});
 });
-
