@@ -4,12 +4,15 @@ console.log('socket init begin');
 var socket = io.connect();
  
 socket.on("lbpdinit", function(data) {
-  console.log('init', data);
-});
- 
-socket.on("lbpdupdate", function(data) {
-  console.log('update', data);
+	$.each( data, function( index, value ){
+		console.log('init', value);
+		itemHandler(value);
+	});
 });
 
+socket.on("lbpdupdate", function(data) {
+	console.log('update', data);
+	itemHandler(data.new_val);
+});
 
 console.log('socket init end');
