@@ -2,7 +2,7 @@
 console.log('map init start');
 
 L.mapbox.accessToken = 'pk.eyJ1Ijoicm9nZXJob3dhcmQiLCJhIjoiY2lrOXlnZHFvMGc5ZnY0a3ViMHkyYTE0dyJ9.CWAOOChPtxviw8fVB0R1mQ';
-var map = L.mapbox.map('map','mapbox.streets').setView([33.793418, -118.153740], 13);
+var map = L.mapbox.map('map','mapbox.comic').setView([33.793418, -118.153740], 13);
 
 console.log('map init end');
 
@@ -27,8 +27,8 @@ function itemHandler(data) {
 	        title: data.title,
 	        description: data.description,
 	        'marker-size': 'large',
-	        'marker-color': '#BE9A6B',
-	        'marker-symbol': 'cafe'
+	        'marker-color': '#770000',
+	        'marker-symbol': 'danger'
 	    }
 	}).addTo(map);
 }
