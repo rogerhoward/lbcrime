@@ -41,7 +41,7 @@ app.get("/incidents", function(req, res) {
 var io = sockio.listen(app.listen(8091), {log: false});
 console.log("Socket.io listening on port 8091");
 
-var getIncidents = r.db("lbpd").table("incidents");
+var getIncidents = r.db("lbpd").table("incidents").orderBy({index: 'id'}).limit(5);
 
 r.connect().then(function(conn) {
 	return getIncidents.changes().run(conn);
