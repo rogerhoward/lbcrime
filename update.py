@@ -5,11 +5,12 @@ import dateutil.parser
 from xml.etree import ElementTree
 import rethinkdb as r
 
+
 def update():
     print 'update() begin'
 
     # Connect to ReThinkDB
-    r.connect( "localhost", 28015).repl()
+    r.connect("localhost", 28015).repl()
 
     # Get XML data from remote API and parse it
     url = 'http://api.ezaxess.com/v2/pd/longbeach/crimes/all'
@@ -32,12 +33,9 @@ def update():
             'longitude': item.find('longitude').text.strip(),
         }
 
-        
-
         response = r.db("lbpd").table("incidents").insert(incident).run()
-        
-        print(incident['id'], response["inserted"])
 
+        print(incident['id'], response["inserted"])
 
     print 'update() completed'
 
