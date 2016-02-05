@@ -1,10 +1,14 @@
+var sockio = require("socket.io");
 var app = require("express")();
 var r = require("rethinkdb");
 
 app.listen(8090);
-console.log("App listening on port 8090");
+console.log("Node.js listening on port 8090");
 
-
+// Serves up default HTML file
+app.get('/', function(req, res){
+  res.sendfile('index.html');
+});
 
 // Returns single incidents by ID
 app.get("/incidents/:itemid", function(req, res) {
@@ -32,3 +36,27 @@ app.get("/incidents", function(req, res) {
 	.then(function(output) { res.json(output); })
 	.error(function(err) { res.status(500).json({err: err}); })
 });
+
+
+var io = sockio.listen(app.listen(8091), {log: false});
+console.log("Socket.io listening on port 8091");
+
+var getIncidents = r.db("lbpd").table("incidents");
+
+r.connect().then(function(conn) {
+	return getIncidents.changes().run(conn);
+})
+.then(function(cursor) {
+	cursor.each(function(err, data) {
+		io.sockets.emit("update", data);
+	});
+});
+
+io.on("connection", function(socket) {
+  r.connect().then(function(conn) {
+    return getIncidents.run(conn)
+      .finally(function() { conn.close(); });
+  })
+  .then(function(output) { socket.emit("incidents", output); });
+});
+
