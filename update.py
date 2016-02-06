@@ -33,7 +33,7 @@ def update():
             'longitude': item.find('longitude').text.strip(),
         }
 
-        response = r.db("lbpd").table("incidents").insert(incident).run()
+        response = r.db("lbpd").table("incidents").insert(incident, conflict ="update").run()
 
         print(incident['id'], response["inserted"])
 
