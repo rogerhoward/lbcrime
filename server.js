@@ -54,6 +54,7 @@ r.connect().then(function(conn) {
 })
 .then(function(cursor) {
 	cursor.each(function(err, data) {
+		console.log(data);
 		io.sockets.emit("lbpdupdate", data);
 	});
 });

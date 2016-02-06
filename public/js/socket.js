@@ -14,7 +14,9 @@ socket.on("lbpdinit", function(data) {
 
 socket.on("lbpdupdate", function(data) {
 	console.log('update', data);
-	itemHandler(data.new_val);
+	if data.old_val is null {
+		itemHandler(data.new_val);
+	}
 });
 
 console.log('socket init end');
