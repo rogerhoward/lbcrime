@@ -14,7 +14,7 @@ socket.on("lbpdinit", function(data) {
 
 socket.on("lbpdupdate", function(data) {
 	console.log('update', data);
-	if data.old_val is null {
+	if data.old_val == null {
 		console.log('added new incident!');
 		itemHandler(data.new_val);
 	} else {
