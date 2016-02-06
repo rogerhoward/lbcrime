@@ -6,6 +6,7 @@ var r = require("rethinkdb");
 app.listen(8090);
 console.log("Node.js listening on port 8090");
 
+
 // Use static serving from public directory
 app.use(express.static('public'));
 
@@ -65,3 +66,9 @@ io.on("connection", function(socket) {
 		});
 	});
 });
+
+
+
+// Schedule refresh of crime data
+var ezaxess = require('./ezaxess');
+ezaxess.schedule();
