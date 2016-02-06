@@ -5,11 +5,27 @@ var schedule = require('node-schedule');
 var http = require('http');
 
 var r = require('rethinkdb');
+var dbName = 'lbpd';
+var tableName = 'incidents';
 var connection = null;
+
 r.connect( {host: 'localhost', port: 28015}, function(err, conn) {
     if (err) throw err;
     connection = conn;
-})
+
+    r.dbCreate(dbName).run(connection, function() {
+    	console.log('database created');
+
+    	r.db(dbName).tableCreate(tableName).run(connection, function() {
+    		console.log('table created');
+    	});
+
+    });
+
+});
+
+
+
 
 module.exports = {
 	schedule: function () {
@@ -31,7 +47,7 @@ var parseAndIngest = function (xmldata) {
 	    incidents = result.data.item.map(rePackage);
 	});
 
-	r.db('lbpd').table('incidents').insert(incidents, {conflict: "update"} ).run(connection, function(err, result) {
+	r.db(dbName).table(tableName).insert(incidents, {conflict: "update"} ).run(connection, function(err, result) {
 	    if (err) throw err;
 	    console.log(JSON.stringify(result, null, 2));
 	})
