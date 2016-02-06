@@ -15,7 +15,7 @@ module.exports = {
 	schedule: function () {
 		console.log('scheduling ezaxess job now...');
 
-		sync();
+		// sync();
 		
 		var job = schedule.scheduleJob('*/1 * * * *', function() {
 			sync();
