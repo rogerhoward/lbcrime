@@ -2,8 +2,7 @@
 console.log('socket init begin');
 
 var host = window.location.hostname; 
-var socket_url = 'http://' + host + ':8091';
-var socket = io.connect(socket_url);
+var socket = io.connect();
  
 socket.on("lbpdinit", function(data) {
 	$.each( data, function( index, value ){
