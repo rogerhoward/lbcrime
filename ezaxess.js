@@ -25,8 +25,6 @@ r.connect( {host: 'localhost', port: 28015}, function(err, conn) {
 });
 
 
-
-
 module.exports = {
 	schedule: function () {
 		console.log('scheduling ezaxess job now...');
