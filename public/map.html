@@ -4,6 +4,9 @@
     <title>Incidents map</title>
 
     <script src="/socket.io/socket.io.js"></script>
+    <script>if (!window.io) { document.write('<script src="http://crime.lbcpu.com:8091/socket.io/socket.io.js"><\/script>'); }
+    </script>
+
     <script src="//code.jquery.com/jquery-1.11.1.js"></script>
 
     <script src='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
@@ -16,7 +19,7 @@
     <div id="content">
       <div id="map"></div>
     </div>
-    
+
     <script src='/js/lib/sprintf.min.js'></script>
 
     <script src='/js/map.js'></script>
