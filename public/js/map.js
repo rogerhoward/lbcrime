@@ -7,10 +7,12 @@ var map = L.mapbox.map('map','mapbox.comic').setView([33.793418, -118.153740], 1
 console.log('map init end');
 
 function itemHandler(data) {
-	console.log('itemHandler', data);
-	console.log(data.longitude, data.latitude);
+	var thisMarker = L.mapbox.featureLayer().addTo(map);
 
-	L.mapbox.featureLayer({
+	thisDescription = sprintf("%s<br><small>%s</small>", data.address, data.time.toString());
+
+
+	thisMarkerGeoJSON = {
 	    // this feature is in the GeoJSON format: see geojson.org
 	    // for the full specification
 	    type: 'Feature',
@@ -25,10 +27,21 @@ function itemHandler(data) {
 	    },
 	    properties: {
 	        title: data.title,
-	        description: data.description,
+	        description: thisDescription,
 	        'marker-size': 'large',
 	        'marker-color': '#770000',
 	        'marker-symbol': 'danger'
 	    }
-	}).addTo(map);
+	};
+
+	thisMarker.setGeoJSON(thisMarkerGeoJSON);
+
+	thisMarker.on('mouseover', function(e) {
+		e.layer.openPopup();
+	});
+
+	thisMarker.on('mouseout', function(e) {
+		e.layer.closePopup();
+	});
+
 }
