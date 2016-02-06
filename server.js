@@ -1,20 +1,13 @@
-var r = require('rethinkdb');
+var sockio = require("socket.io");
 var express = require('express');
-var socketio = require('socket.io');
-
-var app = express(), 
-	server = require('http').createServer(app), 
-	io = socketio().listen(server);
-
-app.start = app.listen = function(){
-  return server.listen.apply(server, arguments)
-};
-
-app.start(8090);
+var app = express();
+var r = require("rethinkdb");
 
 
-// app.listen(8090);
-console.log("Node.js, Socket.io listening on port 8090");
+
+
+app.listen(8090);
+console.log("Node.js listening on port 8090");
 
 
 // Use static serving from public directory
@@ -48,6 +41,9 @@ app.get("/incidents", function(req, res) {
 });
 
 
+// Initialize SocketIO server
+var io = sockio.listen(app.listen(8091), {log: false});
+console.log("Socket.io listening on port 8091");
 
 // Save query reference to all incidents ordered by ID
 var getIncidents = r.db("lbpd").table("incidents").orderBy({index: 'id'});
