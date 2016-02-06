@@ -16,7 +16,7 @@ module.exports = {
 		console.log('scheduling ezaxess job now...');
 
 		// sync();
-		
+
 		var job = schedule.scheduleJob('*/1 * * * *', function() {
 			sync();
 		});
@@ -31,13 +31,10 @@ var parseAndIngest = function (xmldata) {
 	    incidents = result.data.item.map(rePackage);
 	});
 
-	// console.log(inserts);
-
 	r.db('lbpd').table('incidents').insert(incidents, {conflict: "update"} ).run(connection, function(err, result) {
 	    if (err) throw err;
 	    console.log(JSON.stringify(result, null, 2));
 	})
-
 }
 
 var rePackage = function (e) {
