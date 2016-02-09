@@ -2,7 +2,10 @@
 console.log('map init start');
 
 L.mapbox.accessToken = 'pk.eyJ1Ijoicm9nZXJob3dhcmQiLCJhIjoiY2lrOXlnZHFvMGc5ZnY0a3ViMHkyYTE0dyJ9.CWAOOChPtxviw8fVB0R1mQ';
-var map = L.mapbox.map('map','mapbox.comic').setView([33.793418, -118.153740], 13);
+var map = L.mapbox.map('map','mapbox.comic').setView([33.793418, -118.153740], 13).on('ready', function() {
+        new L.Control.MiniMap(L.mapbox.tileLayer('mapbox.streets'))
+            .addTo(map);
+    });
 
 console.log('map init end');
 
